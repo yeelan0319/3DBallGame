@@ -131,6 +131,22 @@ KeyControl = function(sphere){
 				
 		sphere.translateX( velocity.x * delta );
 		sphere.translateY( velocity.y * delta );
+		if(sphere.position.x > WIDTH/2){
+			sphere.position.x = WIDTH/2;
+			velocity.x = 0;
+		}
+		if(sphere.position.x < -WIDTH/2){
+			sphere.position.x = -WIDTH/2;
+			velocity.x = 0;
+		}
+		if(sphere.position.y > LENGTH/2){
+			sphere.position.y = LENGTH/2;
+			velocity.y = 0;
+		}
+		if(sphere.position.y < -LENGTH/2){
+			sphere.position.y = -LENGTH/2;
+			velocity.y = 0;
+		}
 		camera.position.set(sphere.position.x + CAMERAPOS.x, sphere.position.y + CAMERAPOS.y, sphere.position.z + CAMERAPOS.z);
 		camera.lookAt(sphere.geometry.boundingSphere.center); 
 	

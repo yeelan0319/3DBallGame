@@ -13,6 +13,7 @@
 		<script src = "three.min.js"></script>
 		<script src = "keyControl.js"></script>
 		<script>
+			var WIDTH = 1000, LENGTH = 500;
 			var socket = io();
 			var scene, camera, renderer;
 			var geometry, material, plane, sphere;
@@ -34,7 +35,7 @@
  				light.shadowMapHeight = 4096;
  				scene.add(light);
 				
-				geometry = new THREE.PlaneGeometry(1000, 300, 11, 11);
+				geometry = new THREE.PlaneGeometry(WIDTH, LENGTH, 11, 11);
  				var materials = [];
  				materials.push(new THREE.MeshBasicMaterial({color: 0xaaaaaa}));
  				materials.push(new THREE.MeshBasicMaterial({color: 0xffffff}));
