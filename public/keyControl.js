@@ -1,4 +1,4 @@
-KeyControl = function(sphere){		
+ function KeyControl(sphere){		
 	var prevTime = performance.now();
 	
 	var force = new THREE.Vector2();
@@ -20,7 +20,7 @@ KeyControl = function(sphere){
 	var FICTION = 100; //for simplicity, set FICTION a fixed value at every direction
 	var CAMERAPOS = new THREE.Vector3(0,-40,50);
 	
-	var keyDown = function(event){
+	function keyDown(event){
 		if(event.keyCode === key.LEFT || event.keyCode === key.UP || event.keyCode === key.RIGHT || event.keyCode === key.DOWN){
 			var deltaForce = new THREE.Vector2();
 			switch(event.keyCode){
@@ -65,7 +65,7 @@ KeyControl = function(sphere){
 		}
 	}
 	
-	var keyUp = function(event){
+	function keyUp(event){
 		if(event.keyCode === key.LEFT || event.keyCode === key.UP || event.keyCode === key.RIGHT || event.keyCode === key.DOWN){
 			var deltaForce = new THREE.Vector2();
 			switch(event.keyCode){

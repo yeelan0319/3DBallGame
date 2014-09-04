@@ -79,7 +79,11 @@
 			}
 			
 			function animate(){
-				requestAnimationFrame(animate);
+				requestAnimationFrame(function(){
+					setTimeout(function(){
+						animate()
+					}, 33)
+				});
 				renderer.render(scene, camera);
 			}	
 		</script>
