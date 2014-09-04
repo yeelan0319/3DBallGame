@@ -8,7 +8,9 @@
 		</style>
 	</head>
 	<body>
+		<script src = "https://code.jquery.com/jquery-1.11.1.min.js"></script>
 		<script src = "three.min.js"></script>
+		<script src = "keyControl.js"></script>
 		<script>
 			var scene, camera, renderer;
 			var geometry, material, plane, sphere;
@@ -26,8 +28,8 @@
  				light.position.set(1000,-1000,1000);
  				light.target.position.set(0,0,0);
  				light.castShadow = true;
- 				light.shadowMapWidth = 2048;
- 				light.shadowMapHeight = 2048;
+ 				light.shadowMapWidth = 4096;
+ 				light.shadowMapHeight = 4096;
  				scene.add(light);
 				
 				geometry = new THREE.PlaneGeometry(300, 300, 11, 11);
@@ -46,10 +48,10 @@
  				scene.add(plane);
 				
 				geometry = new THREE.SphereGeometry(10,32,32);
-				geometry.applyMatrix((function(){return new THREE.Matrix4()})().makeTranslation(0,0,10))
  				material = new THREE.MeshLambertMaterial( { color: 0x71D7FF} );
 				sphere = new THREE.Mesh(geometry, material);
 				sphere.castShadow = true;
+				sphere.position.set(0,0,10);
 				scene.add(sphere);		
 				
 				camera = new THREE.PerspectiveCamera(75, WIDTH/HEIGHT, 0.1, 20000);
@@ -71,6 +73,8 @@
 					camera.aspect = WIDTH/HEIGHT;
 					camera.updateProjectMatrix();
 				});
+
+				control = new KeyControl(sphere);
 			}
 			
 			function animate(){
