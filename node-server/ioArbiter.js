@@ -4,7 +4,7 @@ var now = require('performance-now');
 module.exports = function(app){
 	var MASS = 0.1;
 	var FICTION = 100; //for simplicity, set FICTION a fixed value at every direction
-	var WIDTH = 1000, LENGTH = 500;
+	var PLANEWIDTH = 1000, PLANELENGTH = 500, SPHERERADIUS = 10;
 
 	var position = new THREE.Vector3(0,0,10);
 	var velocity = new THREE.Vector2();
@@ -58,20 +58,20 @@ module.exports = function(app){
 		
 		position.x += velocity.x * delta;
 		position.y += velocity.y * delta;
-		if(position.x > WIDTH/2){
-			position.x = WIDTH/2;
+		if(position.x > PLANEWIDTH/2 - SPHERERADIUS){
+			position.x = PLANEWIDTH/2 - SPHERERADIUS;
 			velocity.x = 0;
 		}
-		if(position.x < -WIDTH/2){
-			position.x = -WIDTH/2;
+		if(position.x < -PLANEWIDTH/2 + SPHERERADIUS){
+			position.x = -PLANEWIDTH/2 + SPHERERADIUS;
 			velocity.x = 0;
 		}
-		if(position.y > LENGTH/2){
-			position.y = LENGTH/2;
+		if(position.y > PLANELENGTH/2 - SPHERERADIUS){
+			position.y = PLANELENGTH/2 - SPHERERADIUS;
 			velocity.y = 0;
 		}
-		if(position.y < -LENGTH/2){
-			position.y = -LENGTH/2;
+		if(position.y < -PLANELENGTH/2 + SPHERERADIUS){
+			position.y = -PLANELENGTH/2 + SPHERERADIUS;
 			velocity.y = 0;
 		}
 		if(!(force.x || force.y || velocity.x || velocity.y)){
