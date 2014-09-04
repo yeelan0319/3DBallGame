@@ -112,7 +112,7 @@ KeyControl = function(sphere){
 		velocity.x = data.velocity.x;
 		velocity.y = data.velocity.y;
 		camera.position.set(sphere.position.x + CAMERAPOS.x, sphere.position.y + CAMERAPOS.y, sphere.position.z + CAMERAPOS.z);
-		camera.lookAt(sphere.geometry.boundingSphere.center);
+		camera.lookAt(sphere.position);
 	});	
 	
 	function calculateObjTranslation(){
@@ -148,7 +148,7 @@ KeyControl = function(sphere){
 			velocity.y = 0;
 		}
 		camera.position.set(sphere.position.x + CAMERAPOS.x, sphere.position.y + CAMERAPOS.y, sphere.position.z + CAMERAPOS.z);
-		camera.lookAt(sphere.geometry.boundingSphere.center); 
+		camera.lookAt(sphere.position); 
 	
 		if(!(force.x || force.y || velocity.x || velocity.y)){
 			clearInterval(calculateTimer);
