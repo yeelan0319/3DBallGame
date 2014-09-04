@@ -4,6 +4,8 @@
   "description": "3D Ball Game based on sokcet communication and threejs",
   "dependencies": {
     "express": "^4.8.7",
-    "socket.io": "^1.0.4"
+    "performance-now": "^0.1.4",
+    "socket.io": "^1.1.0",
+    "three": "^0.68.0"
   }
 }

@@ -9,9 +9,11 @@
 	</head>
 	<body>
 		<script src = "https://code.jquery.com/jquery-1.11.1.min.js"></script>
+		<script src="/socket.io/socket.io.js"></script>
 		<script src = "three.min.js"></script>
 		<script src = "keyControl.js"></script>
 		<script>
+			var socket = io();
 			var scene, camera, renderer;
 			var geometry, material, plane, sphere;
 			init();
@@ -32,7 +34,7 @@
  				light.shadowMapHeight = 4096;
  				scene.add(light);
 				
-				geometry = new THREE.PlaneGeometry(300, 300, 11, 11);
+				geometry = new THREE.PlaneGeometry(1000, 300, 11, 11);
  				var materials = [];
  				materials.push(new THREE.MeshBasicMaterial({color: 0xaaaaaa}));
  				materials.push(new THREE.MeshBasicMaterial({color: 0xffffff}));
@@ -51,12 +53,10 @@
  				material = new THREE.MeshLambertMaterial( { color: 0x71D7FF} );
 				sphere = new THREE.Mesh(geometry, material);
 				sphere.castShadow = true;
-				sphere.position.set(0,0,10);
+				sphere.position.set(0,0,-10);
 				scene.add(sphere);		
 				
 				camera = new THREE.PerspectiveCamera(75, WIDTH/HEIGHT, 0.1, 20000);
-				camera.position.set(0,-50,100);
-				camera.lookAt(sphere.geometry.boundingSphere.center);
 				scene.add(camera);
 					
 				renderer = new THREE.WebGLRenderer({antialias:true});

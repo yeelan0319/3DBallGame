@@ -18,6 +18,7 @@ KeyControl = function(sphere){
 
 	var MASS = 0.1;
 	var FICTION = 100; //for simplicity, set FICTION a fixed value at every direction
+	var CAMERAPOS = new THREE.Vector3(0,-40,50);
 	
 	var keyDown = function(event){
 		if(event.keyCode === key.LEFT || event.keyCode === key.UP || event.keyCode === key.RIGHT || event.keyCode === key.DOWN){
@@ -60,10 +61,7 @@ KeyControl = function(sphere){
 					}
 					break;
 			}
-			//send request to server
-			var event = $.Event('serverReq');
-			event.deltaForce = deltaForce;
-			$(document).trigger(event);
+			socket.emit('forceChange', JSON.stringify(deltaForce));
 		}
 	}
 	
@@ -88,39 +86,36 @@ KeyControl = function(sphere){
 					deltaForce.y = 100;
 					break;
 			}
-			//send request to server
-			var event = $.Event('serverReq');
-			event.deltaForce = deltaForce;
-			$(document).trigger(event);
+			socket.emit('forceChange', JSON.stringify(deltaForce));
 		}
 	}
 	
 	$(document).bind('keydown', keyDown);
 	$(document).bind('keyup', keyUp);
 	
-	//should be a server logic
-	$(document).bind('serverReq', function(event){
-		force.x += event.deltaForce.x;
-		force.y += event.deltaForce.y;
-		
-		$(document).trigger($.Event('forceChanged'));
-	});
-	//should be listen by socket event
-	$(document).bind('forceChanged', function(event){
-		//the event should actually receive from server response
-		//should update current force
+	socket.on('forceChanged', function(data){
+		data = JSON.parse(data);
+		force.x = data.x;
+		force.y = data.y;
 		if(calculateTimer){
 			clearInterval(calculateTimer);
 		}
 		//about 30 frames per second
 		prevTime = performance.now();
-		i = 0;
 		calculateTimer = setInterval(calculateObjTranslation, 33); 
+	});
+	socket.on('calibration', function(data){
+		data = JSON.parse(data);
+		force.x = data.force.x;
+		force.y = data.force.y;
+		sphere.position.set(data.position.x, data.position.y, data.position.z);
+		velocity.x = data.velocity.x;
+		velocity.y = data.velocity.y;
+		camera.position.set(sphere.position.x + CAMERAPOS.x, sphere.position.y + CAMERAPOS.y, sphere.position.z + CAMERAPOS.z);
+		camera.lookAt(sphere.geometry.boundingSphere.center);
 	});	
 	
 	function calculateObjTranslation(){
-		var translation = new THREE.Vector2();
-		
 		var time = performance.now();
 		var delta = (time - prevTime) / 1000;
 		prevTime = time;
@@ -135,7 +130,9 @@ KeyControl = function(sphere){
 		velocity.y += force.y / MASS * delta;
 				
 		sphere.translateX( velocity.x * delta );
-		sphere.translateY( velocity.y * delta ); 
+		sphere.translateY( velocity.y * delta );
+		camera.position.set(sphere.position.x + CAMERAPOS.x, sphere.position.y + CAMERAPOS.y, sphere.position.z + CAMERAPOS.z);
+		camera.lookAt(sphere.geometry.boundingSphere.center); 
 	
 		if(!(force.x || force.y || velocity.x || velocity.y)){
 			clearInterval(calculateTimer);

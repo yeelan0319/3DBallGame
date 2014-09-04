@@ -10,9 +10,10 @@ var Server = function(){
 		app.express = express();
 
 		app.express.use(express.static(__dirname + '/../public'));
-		//(require('./ioRouting'))(app);
+		(require('./ioArbiter'))(app);
 
 		http = require('http').Server(app.express);
+		app.io.attach(http);
 	}
 
 	function portStartListening(){
