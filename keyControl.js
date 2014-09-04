@@ -1,33 +1,63 @@
-KeyControl = function(){		
+KeyControl = function(sphere){		
 	var prevTime = performance.now();
 	
-	var force = THREE.Vector2();
-	var velocity = THREE.Vector2();
+	var force = new THREE.Vector2();
+	var velocity = new THREE.Vector2();
 	
 	var key = {
 		LEFT: 37,
 		UP: 38,
 		RIGHT: 39,
-		DOWN: 40
+		DOWN: 40,
+		leftPressed: false,
+		upPressed: false,
+		rightPressed: false,
+		downPressed: false
 	}
-	var MASS = 1;
-	var FICTION = 10; //for simplicity, set FICTION a fixed value at every direction
+	var calculateTimer;
+
+	var MASS = 0.1;
+	var FICTION = 100; //for simplicity, set FICTION a fixed value at every direction
 	
 	var keyDown = function(event){
 		if(event.keyCode === key.LEFT || event.keyCode === key.UP || event.keyCode === key.RIGHT || event.keyCode === key.DOWN){
-			var deltaForce = THREE.Vector2();
+			var deltaForce = new THREE.Vector2();
 			switch(event.keyCode){
 				case key.LEFT:
-					deltaForce.y = 10;
+					if(!key.leftPressed){
+						key.leftPressed = true;
+						deltaForce.x = -100;
+					}
+					else{
+						return;
+					}
 					break;
 				case key.UP:
-					deltaForce.x = 10;
+					if(!key.upPressed){
+						key.upPressed = true;
+						deltaForce.y = 100;
+					}
+					else{
+						return;
+					}
 					break;
 				case key.RIGHT:
-					deltaForce.y = -10;
+					if(!key.rightPressed){
+						key.rightPressed = true;
+						deltaForce.x = 100;
+					}
+					else{
+						return;
+					}
 					break;
 				case key.DOWN:
-					deltaForce.x = -10;
+					if(!key.downPressed){
+						key.downPressed = true;
+						deltaForce.y = -100;
+					}
+					else{
+						return;
+					}
 					break;
 			}
 			//send request to server
@@ -39,19 +69,23 @@ KeyControl = function(){
 	
 	var keyUp = function(event){
 		if(event.keyCode === key.LEFT || event.keyCode === key.UP || event.keyCode === key.RIGHT || event.keyCode === key.DOWN){
-			var deltaForce = THREE.Vector2();
+			var deltaForce = new THREE.Vector2();
 			switch(event.keyCode){
 				case key.LEFT:
-					deltaForce.y = -10;
+					key.leftPressed = false;
+					deltaForce.x = 100;
 					break;
 				case key.UP:
-					deltaForce.x = -10;
+					key.upPressed = false;
+					deltaForce.y = -100;
 					break;
 				case key.RIGHT:
-					deltaForce.y = 10;
+					key.rightPressed = false;
+					deltaForce.x = -100;
 					break;
 				case key.DOWN:
-					deltaForce.x = 10;
+					key.downPressed = false;
+					deltaForce.y = 100;
 					break;
 			}
 			//send request to server
@@ -76,14 +110,16 @@ KeyControl = function(){
 		//the event should actually receive from server response
 		//should update current force
 		if(calculateTimer){
-			clearTimeout(calculateTimer);
+			clearInterval(calculateTimer);
 		}
 		//about 30 frames per second
-		calculateTimer = setTimeout(calculateObjTranslation, 33); 
+		prevTime = performance.now();
+		i = 0;
+		calculateTimer = setInterval(calculateObjTranslation, 33); 
 	});	
 	
 	function calculateObjTranslation(){
-		var translation = THREE.Vector2();
+		var translation = new THREE.Vector2();
 		
 		var time = performance.now();
 		var delta = (time - prevTime) / 1000;
@@ -98,12 +134,11 @@ KeyControl = function(){
 		velocity.x += force.x / MASS * delta;
 		velocity.y += force.y / MASS * delta;
 				
-		translation.x = velocity.x * delta;
-		translation.y = velocity.y * delta;
-		
-		if(force.x || force.y || velocity.x || velocity.y){
-			clearTimeout(calculateTimer);
-		}
-		return translation;
+		sphere.translateX( velocity.x * delta );
+		sphere.translateY( velocity.y * delta ); 
+	
+		if(!(force.x || force.y || velocity.x || velocity.y)){
+			clearInterval(calculateTimer);
+		}		
 	}
 }
