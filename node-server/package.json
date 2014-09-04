@@ -1,0 +1,9 @@
+{
+  "name": "3DBallGame",
+  "version": "0.0.1",
+  "description": "3D Ball Game based on sokcet communication and threejs",
+  "dependencies": {
+    "express": "^4.8.7",
+    "socket.io": "^1.0.4"
+  }
+}
